@@ -3,6 +3,7 @@ const packages = require("./../utils/listPackages")([
     // Append untested libraries to the blacklist - they are all work in progress.
     "ui",
     "form",
+    "i18n",
     "i18n-react",
     "storybook-utils"
 ]);

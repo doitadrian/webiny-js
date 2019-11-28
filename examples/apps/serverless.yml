@@ -2,37 +2,53 @@ name: webiny-cms
 
 vars:
   region: ${env.AWS_REGION}
+  lumigo:
+    token: ${env.LUMIGO_TOKEN}
 
 site:
   component: "@webiny/serverless-app"
   inputs:
+    name: "site" # <-- fix this via aliases somehow
     description: Webiny Site
     region: ${vars.region}
     memory: 128
     timeout: 30
-    code: ./site/build
+    root: ./site
+    #hook: yarn build:${cli.env}
+    webpackConfig: ../webpack.config.js
+    plugins:
+      - factory: "@webiny/api-plugin-lumigo-tracer"
+        options: ${vars.lumigo}
     env:
       SSR_FUNCTION: ${ssr.name}
-
 ssr:
   component: "@webiny/serverless-function"
   inputs:
     description: Site SSR
     region: ${vars.region}
-    hook: yarn build:${cli.env}
+    hook: yarn build:${cli.env}:ssr
     root: ./site
     code: ./site/build-ssr
     handler: handler.handler
     memory: 2048
     timeout: 30
+    webpackConfig: ../webpack.config.js
+    plugins:
+      - factory: "@webiny/api-plugin-lumigo-tracer"
+        options: ${vars.lumigo}
 
 admin:
   component: "@webiny/serverless-app"
   inputs:
+    name: "admin" # <-- fix this via aliases somehow
     region: ${vars.region}
     description: Webiny Admin
     hook: yarn build:${cli.env}
     root: ./admin
+    webpackConfig: ../webpack.config.js
+    plugins:
+      - factory: "@webiny/api-plugin-lumigo-tracer"
+        options: ${vars.lumigo}
 
 api:
   component: "@webiny/serverless-api-gateway"
