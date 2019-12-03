@@ -223,6 +223,7 @@ const executeGraph = async (allComponents, graph, instance) => {
         const componentData = graph.node(alias);
         const component = await instance.load(componentData.path, alias);
         component.context.instance.debug = debug(`webiny:${alias}`);
+        component.context.instance.alias = alias;
         const availableOutputs = getOutputs(allComponents);
         const inputs = resolveObject(allComponents[alias].inputs, availableOutputs);
         instance.context.status("Deploying", alias);

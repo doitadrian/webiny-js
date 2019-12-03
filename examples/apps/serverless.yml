@@ -8,13 +8,11 @@ vars:
 site:
   component: "@webiny/serverless-app"
   inputs:
-    name: "site" # <-- fix this via aliases somehow
     description: Webiny Site
     region: ${vars.region}
     memory: 128
     timeout: 30
     root: ./site
-    #hook: yarn build:${cli.env}
     webpackConfig: ../webpack.config.js
     plugins:
       - factory: "@webiny/api-plugin-lumigo-tracer"
@@ -26,7 +24,7 @@ ssr:
   inputs:
     description: Site SSR
     region: ${vars.region}
-    hook: yarn build:${cli.env}:ssr
+    hook: yarn build:${cli.env}
     root: ./site
     code: ./site/build-ssr
     handler: handler.handler
@@ -40,7 +38,6 @@ ssr:
 admin:
   component: "@webiny/serverless-app"
   inputs:
-    name: "admin" # <-- fix this via aliases somehow
     region: ${vars.region}
     description: Webiny Admin
     hook: yarn build:${cli.env}

@@ -27,7 +27,7 @@ const normalizePlugins = plugins => {
 
 class ServerlessFunction extends Component {
     async default(inputs = {}) {
-        let { name, webpackConfig, root } = inputs;
+        let { webpackConfig, root } = inputs;
 
         let plugins = normalizePlugins(inputs.plugins || []);
 
@@ -52,7 +52,7 @@ class ServerlessFunction extends Component {
 
         if (hasPlugins) {
             const boilerplateRoot = join(this.context.instance.root, ".webiny");
-            const componentRoot = join(boilerplateRoot, camelCase(name));
+            const componentRoot = join(boilerplateRoot, camelCase(this.context.instance.alias));
             fs.ensureDirSync(componentRoot);
 
             // Generate boilerplate code
