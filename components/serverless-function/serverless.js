@@ -144,7 +144,7 @@ class ServerlessFunction extends Component {
             );
         }
 
-        const lambda = await this.load("@serverless/function");
+        const lambda = await this.load("@webiny/serverless-aws-lambda");
         const output = await lambda({
             ...inputs,
             handler: hasPlugins ? "wrapper.wrapper" : inputs.handler
@@ -157,7 +157,7 @@ class ServerlessFunction extends Component {
     }
 
     async remove(inputs = {}) {
-        const lambda = await this.load("@serverless/function");
+        const lambda = await this.load("@webiny/serverless-aws-lambda");
         await lambda.remove(inputs);
 
         this.state = {};

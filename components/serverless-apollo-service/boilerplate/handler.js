@@ -8,7 +8,7 @@ export const handler = async (event, context) => {
         const { handler } = await createHandler({ plugins });
         apolloHandler = handler;
 
-        const wrappers = plugins.byType("apollo-handler-wrapper");
+        const wrappers = plugins.byType("handler-wrapper");
         for (let i = 0; i < wrappers.length; i++) {
             apolloHandler = await wrappers[i].wrap({ handler: apolloHandler, plugins });
         }

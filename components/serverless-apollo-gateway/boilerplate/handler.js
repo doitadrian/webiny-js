@@ -7,7 +7,7 @@ export const handler = async (event, context) => {
         const plugin = plugins.byName("create-apollo-gateway");
         apolloHandler = await plugin.createGateway({ plugins });
 
-        const wrappers = plugins.byType("apollo-handler-wrapper");
+        const wrappers = plugins.byType("handler-wrapper");
         for (let i = 0; i < wrappers.length; i++) {
             apolloHandler = await wrappers[i].wrap({ handler: apolloHandler, plugins });
         }

@@ -15,7 +15,7 @@ class ServerlessApp extends Component {
 
         const output = await fn({
             ...inputs,
-            description: `serverless-app: ${inputs.description}`
+            description: inputs.description
         });
 
         this.state.output = output;

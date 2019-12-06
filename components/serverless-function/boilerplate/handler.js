@@ -10,7 +10,7 @@ export const wrapper = async (event, context) => {
         const userHandler = require("./handler");
         apolloHandler = userHandler["handler"]; // TODO: make this dynamic
 
-        const wrappers = plugins.byType("apollo-handler-wrapper");
+        const wrappers = plugins.byType("handler-wrapper");
         for (let i = 0; i < wrappers.length; i++) {
             apolloHandler = await wrappers[i].wrap({ handler: apolloHandler, plugins });
         }

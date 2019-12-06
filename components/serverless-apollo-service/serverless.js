@@ -4,6 +4,7 @@ const prettier = require("prettier");
 const webpack = require("webpack");
 const execa = require("execa");
 const camelCase = require("lodash.camelcase");
+const get = require("lodash.get");
 const { transform } = require("@babel/core");
 const { Component } = require("@serverless/core");
 
@@ -81,7 +82,6 @@ class ApolloService extends Component {
             region,
             endpoints = [],
             graphqlPath = "/graphql",
-            name,
             env = {},
             memory = 512,
             timeout = 10,
@@ -91,19 +91,19 @@ class ApolloService extends Component {
             webpackConfig = null
         } = inputs;
 
-        if (!name) {
-            throw Error(`"inputs.name" is a required parameter!`);
-        }
-
         let plugins = normalizePlugins(inputs.plugins || []);
 
         // TODO: remove in the next major release
         plugins = addBackwardsCompatibility(inputs, plugins);
         plugins = dedupePlugins(plugins);
 
+        const name =
+            get(this.state, "output.graphql.name") ||
+            this.context.instance.getResourceName(inputs.name || "graphql");
+
         const injectPlugins = [];
         const boilerplateRoot = join(this.context.instance.root, ".webiny");
-        const componentRoot = join(boilerplateRoot, camelCase(name));
+        const componentRoot = join(boilerplateRoot, camelCase(this.context.instance.alias));
         fs.ensureDirSync(componentRoot);
 
         this.state.inputs = inputs;
@@ -205,8 +205,9 @@ class ApolloService extends Component {
 
         this.context.instance.debug("Deploy lambda");
         const lambdaOut = await lambda({
+            name,
             region,
-            description: `serverless-apollo-service: ${description || name}`,
+            description,
             code: join(componentRoot, "build"),
             root: componentRoot,
             handler: "handler.handler",
@@ -218,8 +219,7 @@ class ApolloService extends Component {
         this.context.instance.debug(`Deploying API Gateway`);
         const apiGwOut = await apiGw({
             region,
-            name,
-            description: `API for ${name}`,
+            description: `API for ${this.context.instance.alias}`,
             stage: "prod",
             binaryMediaTypes,
             endpointTypes,

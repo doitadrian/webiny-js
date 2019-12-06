@@ -8,6 +8,7 @@ vars:
 site:
   component: "@webiny/serverless-app"
   inputs:
+    name: site-app
     description: Webiny Site
     region: ${vars.region}
     memory: 128
@@ -22,6 +23,7 @@ site:
 ssr:
   component: "@webiny/serverless-function"
   inputs:
+    name: site-ssr
     description: Site SSR
     region: ${vars.region}
     hook: yarn build:${cli.env}
@@ -38,6 +40,7 @@ ssr:
 admin:
   component: "@webiny/serverless-app"
   inputs:
+    name: admin-app
     region: ${vars.region}
     description: Webiny Admin
     hook: yarn build:${cli.env}
