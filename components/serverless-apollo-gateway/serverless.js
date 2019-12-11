@@ -5,6 +5,7 @@ const execa = require("execa");
 const loadJson = require("load-json-file");
 const camelCase = require("lodash.camelcase");
 const isEqual = require("lodash.isequal");
+const get = require("lodash.get");
 const webpack = require("webpack");
 const writeJson = require("write-json-file");
 const { transform } = require("@babel/core");
@@ -49,17 +50,12 @@ class ApolloGateway extends Component {
 
         const {
             region,
-            name = null,
             env = {},
             memory = 128,
             timeout = 10,
             description,
             webpackConfig = null
         } = inputs;
-
-        if (!name) {
-            throw Error(`"inputs.name" is a required parameter!`);
-        }
 
         let plugins = normalizePlugins(inputs.plugins || []);
 
@@ -77,8 +73,12 @@ class ApolloGateway extends Component {
             });
         }
 
+        const name =
+            get(this.state, "output.name") ||
+            this.context.instance.getResourceName(inputs.name || "apollo-gateway");
+
         const boilerplateRoot = join(this.context.instance.root, ".webiny");
-        const componentRoot = join(boilerplateRoot, camelCase(name));
+        const componentRoot = join(boilerplateRoot, camelCase(this.context.instance.alias));
         fs.ensureDirSync(componentRoot);
 
         await this.save();
@@ -181,8 +181,9 @@ class ApolloGateway extends Component {
         const lambda = await this.load("@webiny/serverless-function");
 
         const output = await lambda({
+            name,
             region,
-            description: `serverless-apollo-gateway: ${description || name}`,
+            description,
             code: join(componentRoot, "build"),
             root: componentRoot,
             handler: "handler.handler",

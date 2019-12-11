@@ -1,11 +1,10 @@
-// @flow
 const S3 = require("aws-sdk/clients/s3");
 const { getEnvironment } = require("../utils");
 const path = require("path");
 
 const managers = require("./../managers");
 
-module.exports.handler = async event => {
+module.exports.handler = async (event) => {
     const keys = [];
     for (let i = 0; i < event.Records.length; i++) {
         let record = event.Records[i];

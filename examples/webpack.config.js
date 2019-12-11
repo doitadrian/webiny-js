@@ -13,7 +13,7 @@ module.exports = ({ root }) => {
         },
         // Generate sourcemaps for proper error messages
         devtool: false,
-        externals: ["aws-sdk"],
+        externals: ["aws-sdk", "./handler"],
         mode: "production",
         optimization: {
             // We no not want to minimize our code.
