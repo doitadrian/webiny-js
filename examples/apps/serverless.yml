@@ -4,6 +4,7 @@ vars:
   region: ${env.AWS_REGION}
   lumigo:
     token: ${env.LUMIGO_TOKEN}
+  apiUrl: "https://d3sofjdc7z3qe9.cloudfront.net/graphql"
 
 site:
   component: "@webiny/serverless-app"
@@ -20,6 +21,7 @@ site:
         options: ${vars.lumigo}
     env:
       SSR_FUNCTION: ${ssr.name}
+      API_URL: ${vars.apiUrl}
 ssr:
   component: "@webiny/serverless-function"
   inputs:
@@ -62,6 +64,12 @@ api:
       - path: /admin
         method: GET
         function: ${admin}
+      - path: /ssr/{key+}
+        method: GET
+        function: ${ssr}
+      - path: /ssr
+        method: GET
+        function: ${ssr}
       - path: /{key+}
         method: GET
         function: ${site}
@@ -74,3 +82,10 @@ cdn:
   inputs:
     origins:
       - url: ${api.url}
+        pathPatterns:
+          "/ssr":
+            ttl: 0
+            forward:
+              headers: 'all'
+              queryString: true
+            allowedHttpMethods: ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]

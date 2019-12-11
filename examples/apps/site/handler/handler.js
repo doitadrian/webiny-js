@@ -1,86 +1,21 @@
-const fs = require("fs");
-const path = require("path");
-const mime = require("mime-types");
-const isUtf8 = require("isutf8");
+import mime from "mime-types";
+import serveError from "./utils/serveError";
+import serveFile from "./utils/serveFile";
+import serveCachedPageSsr from "./utils/serveCachedPageSsr";
 
-const createResponse = ({ type, body, isBase64Encoded, headers }) => {
-    return {
-        statusCode: 200,
-        headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Content-Type": type,
-            ...headers
-        },
-        body,
-        isBase64Encoded
-    };
-};
-
-module.exports.handler = async event => {
-    let key = event.pathParameters ? event.pathParameters.key : "";
-    let type = mime.lookup(key);
-    let isBase64Encoded = false;
-
-    if (key.endsWith("undefined")) {
-        return createResponse({
-            type,
-            body: "",
-            isBase64Encoded,
-            headers: { "Cache-Control": "public, max-age=60" }
-        });
-    }
-
-    if (!type) {
-        type = "text/html";
-        const LambdaClient = require("aws-sdk/clients/lambda");
-        const Lambda = new LambdaClient();
-        const params = {
-            FunctionName: process.env.SSR_FUNCTION,
-            InvocationType: "RequestResponse",
-            Payload: JSON.stringify({ url: "/" + key })
-        };
-        const { Payload } = await Lambda.invoke(params).promise();
-        const { html } = JSON.parse(Payload);
-
-        return createResponse({
-            type,
-            body: html,
-            isBase64Encoded,
-            headers: { "Cache-Control": "public, max-age=60" }
-        });
-    }
-
-    const filePath = path.resolve(key);
+export const handler = async event => {
+    const { path } = event;
 
     try {
-        let buffer = await new Promise((resolve, reject) => {
-            fs.readFile(filePath, (err, data) => {
-                if (err) return reject(err);
-                resolve(data);
-            });
-        });
+        let type = mime.lookup(path);
 
-        isBase64Encoded = !isUtf8(buffer);
-        const headers = {};
-
-        if (key.includes("static")) {
-            headers["Cache-Control"] = "public, max-age=2592000";
+        if (type) {
+            return serveFile(path);
         }
 
-        return createResponse({
-            type,
-            body: buffer.toString(isBase64Encoded ? "base64" : "utf8"),
-            isBase64Encoded,
-            headers
-        });
+        return serveCachedPageSsr(path);
     } catch (e) {
-        return {
-            statusCode: 404,
-            body: e.message,
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Cache-Control": "no-store"
-            }
-        };
+        // An error occurred, serve the error.
+        return serveError(e);
     }
 };
