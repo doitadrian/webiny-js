@@ -1166,28 +1166,6 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@commodo/fields-storage-mongodb@^0.2.12":
-  version "0.2.15"
-  resolved "https://registry.npmjs.org/@commodo/fields-storage-mongodb/-/fields-storage-mongodb-0.2.15.tgz#438aad1a9d98b5501aabede35fce6ff295235ba1"
-  integrity sha512-RglYX3SmAO61LSiFra+8zECYly8Jn8vwBkEJqgFv/K24uPJ8dnbCJpdeF4jmT+w3swULSNrZXJZ8iPzxMsqT0w==
-  dependencies:
-    "@commodo/fields" "^0.2.8"
-    "@commodo/fields-storage" "^0.3.2"
-    mdbid "^1.0.0"
-    mongodb "^3.1.13"
-    repropose "^1.0.2"
-
-"@commodo/fields-storage-mongodb@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.npmjs.org/@commodo/fields-storage-mongodb/-/fields-storage-mongodb-0.3.0.tgz#8c32ba9b48831f3995dd49ba09541dd8426b6f5e"
-  integrity sha512-z6WemHRRsBycoX+e5EpQA4EwTD5ruoOEaH7oYfelhY336GWIjaF7wzeBIrYCrILSS5kSvOUKJz3CfU6ItcW+/g==
-  dependencies:
-    "@commodo/fields" "^0.2.8"
-    "@commodo/fields-storage" "^0.4.0"
-    mdbid "^1.0.0"
-    mongodb "^3.1.13"
-    repropose "^1.0.2"
-
 "@commodo/fields-storage-ref@^0.3.4":
   version "0.3.4"
   resolved "https://registry.npmjs.org/@commodo/fields-storage-ref/-/fields-storage-ref-0.3.4.tgz#e09ca7df97970253c00371f628a295d8acc127d4"
@@ -1205,15 +1183,6 @@
   dependencies:
     "@commodo/fields" "^0.2.8"
     repropose "^1.0.0"
-
-"@commodo/fields-storage@^0.3.2":
-  version "0.3.2"
-  resolved "https://registry.npmjs.org/@commodo/fields-storage/-/fields-storage-0.3.2.tgz#e2a6846305dadf6b89e69615d30ae7ebb92fbace"
-  integrity sha512-hnnY4AntZpbDBHvBlSjf5+k5bkzW7scj0qw7pJencxC9vurjIrFep8YjrqQuLiKzpgPxkzcKR374Uht00FY3Xg==
-  dependencies:
-    "@commodo/hooks" "^0.1.1"
-    "@commodo/name" "^1.0.2"
-    repropose "^1.0.2"
 
 "@commodo/fields-storage@^0.4.0":
   version "0.4.0"
@@ -1238,7 +1207,7 @@
   dependencies:
     repropose "^1.0.2"
 
-"@commodo/name@^1.0.2", "@commodo/name@^1.1.0":
+"@commodo/name@^1.1.0":
   version "1.1.0"
   resolved "https://registry.npmjs.org/@commodo/name/-/name-1.1.0.tgz#9ef4867aa69712702c7d366290e96ef5a5b1ffb0"
   integrity sha512-Fyx2dKGKm9QByVNU9BSCAvy4yjtxbEdsEThEMV5F/MUVXvKOGSpkRqyFkDiqKo9Q00EdkRn3yI/6ptGcSZSkzg==
@@ -5405,6 +5374,11 @@ apollo-env@^0.6.0:
     core-js "^3.0.1"
     node-fetch "^2.2.0"
     sha.js "^2.4.11"
+
+apollo-gateway-aws-lambda@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.npmjs.org/apollo-gateway-aws-lambda/-/apollo-gateway-aws-lambda-0.1.2.tgz#c83d866fdb35b7928c3311c617e3b892927c2902"
+  integrity sha512-ZdbD9f1eFLiklffyxPufMwr9cKB0/8/CHesXQ6qg1303hRkvITnCdK0wFRciZzLR0iV2ZaFjB2tAsMHKkKQ6dg==
 
 apollo-graphql@^0.3.4:
   version "0.3.6"
@@ -16836,7 +16810,7 @@ mongodb-memory-server@6.0.1:
   dependencies:
     mongodb-memory-server-core "6.0.1"
 
-mongodb@^3.1.13, mongodb@^3.2.7, mongodb@^3.3.2, mongodb@^3.3.3:
+mongodb@^3.2.7, mongodb@^3.3.2, mongodb@^3.3.3:
   version "3.4.0"
   resolved "https://registry.npmjs.org/mongodb/-/mongodb-3.4.0.tgz#3490bcdcadb9acfbf77e5ce14548bd59ba33a5f6"
   integrity sha512-W90jm/n8F0Edm47ljkVRK9l8qGW9g8T9ZSiZWRiUP58wLhsCJCeN/JxdpVnH0CUwwAw2hITUcCo9x58udpX2Uw==

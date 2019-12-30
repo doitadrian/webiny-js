@@ -29,17 +29,17 @@ gateway:
           server: ${vars.apollo.server}
           services:
             - name: security
-              url: ${security.api.graphqlUrl}
+              function: ${security.graphql.arn}
             - name: files
-              url: ${files.api.graphqlUrl}
+              function: ${files.graphql.arn}
             - name: pageBuilder
-              url: ${pageBuilder.api.graphqlUrl}
+              function: ${pageBuilder.graphql.arn}
             - name: i18n
-              url: ${i18n.api.graphqlUrl}
+              function: ${i18n.graphql.arn}
             - name: formBuilder
-              url: ${formBuilder.api.graphqlUrl}
+              function: ${formBuilder.graphql.arn}
             - name: ssrCache
-              url: ${ssrCache.api.graphqlUrl}
+              function: ${ssrCache.graphql.arn}
 
 dbProxy:
   component: "@webiny/serverless-db-proxy/dist"

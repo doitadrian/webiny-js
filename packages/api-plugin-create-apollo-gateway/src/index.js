@@ -1,4 +1,5 @@
-import { ApolloGateway, RemoteGraphQLDataSource } from "@apollo/gateway";
+import { ApolloGateway } from "@apollo/gateway";
+import { LambdaGraphQLDataSource } from "apollo-gateway-aws-lambda";
 import { ApolloServer } from "apollo-server-lambda";
 import buildHeaders from "./buildHeaders";
 
@@ -15,11 +16,14 @@ export default ({ server = {}, handler = {}, services = [] } = {}) => ({
     type: "create-apollo-gateway",
     async createGateway({ plugins }) {
         const gateway = new ApolloGateway({
-            serviceList: services,
+            serviceList: services.map(s => {
+                s.url = "https://www.webiny.com";
+                return s;
+            }),
 
-            buildService({ url }) {
-                return new RemoteGraphQLDataSource({
-                    url,
+            buildService({ name }) {
+                return new LambdaGraphQLDataSource({
+                    functionName: services.find(s => s.name === name).function,
 
                     willSendRequest({ request, context }) {
                         if (context.headers) {

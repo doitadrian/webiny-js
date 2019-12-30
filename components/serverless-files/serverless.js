@@ -116,6 +116,7 @@ class FilesComponent extends Component {
         });
 
         const output = {
+            graphql: apolloServiceOutput.graphql,
             api: apolloServiceOutput.api,
             s3: s3Output,
             cdnOrigin: {

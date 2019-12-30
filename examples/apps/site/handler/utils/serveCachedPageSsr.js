@@ -5,11 +5,13 @@ import createModels from "./models";
 
 let models = null;
 
-const serveCachedPageSsr = async ({ path, multiValueQueryStringParameters }) => {
+const serveCachedPageSsr = async ({ path, multiValueQueryStringParameters }, ts) => {
     const fullPath = path + qs.stringify(multiValueQueryStringParameters, true);
     if (!models) {
         models = createModels();
     }
+
+    console.log('idemo procitati cache', new Date() - ts);
 
     const { SsrCache } = models;
     let ssrCache = await SsrCache.findByPath(path);
@@ -19,8 +21,13 @@ const serveCachedPageSsr = async ({ path, multiValueQueryStringParameters }) => 
         await ssrCache.save();
     }
 
+    console.log('procitao cache', new Date() - ts);
+
     if (ssrCache.isEmpty) {
+        const ts = new Date();
         await ssrCache.refresh();
+        console.log('refresh trajao:', new Date() - ts);
+
         return createResponse({
             type: "text/html",
             body: ssrCache.content,
