@@ -135,7 +135,6 @@ yargs.command(
 yargs.command(
     "disable-tracking",
     "Disable tracking of Webiny stats.",
-    () => {},
     () => {
         const { setTracking } = require("./config");
         setTracking(false);
@@ -146,13 +145,20 @@ yargs.command(
 yargs.command(
     "enable-tracking",
     "Enable tracking of Webiny stats.",
-    () => {},
     () => {
         const { setTracking } = require("./config");
         setTracking(true);
         console.log(
             "INFO: tracking of Webiny stats is now ENABLED! Thank you for helping us with anonymous data 🎉"
         );
+    }
+);
+
+yargs.command(
+    "start",
+    `Start current app`,
+    async () => {
+        await require("./start")();
     }
 );
 

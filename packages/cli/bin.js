@@ -2,7 +2,31 @@
 "use strict";
 
 const chalk = require("chalk");
-const execa = require("execa");
+yargs.command(
+    "deploy-api",
+    `Deploy API from ${green("api")} folder.\n${dim("(NOTE: run from project root)")}`,
+    yargs => {
+        yargs.option("env", {
+            describe: "Environment to deploy. Must match your environments in .env.json.",
+            default: "local"
+        });
+        yargs.option("alias", {
+            describe: "Alias to deploy."
+        });
+        yargs.option("force", {
+            describe: "Deploy even if component inputs were not changed."
+        });
+        yargs.option("debug", {
+            describe: "Show debug messages.",
+            default: false,
+            type: "boolean"
+        });
+    },
+    async argv => {
+        await require("./sls/deploy")({ ...argv, what: "api" });
+        process.exit(0);
+    }
+);
 const { verifyConfig } = require("./config");
 const currentNodeVersion = process.versions.node;
 const majorVersion = parseInt(currentNodeVersion.split(".")[0]);
