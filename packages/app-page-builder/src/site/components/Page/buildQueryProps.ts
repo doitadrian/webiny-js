@@ -75,14 +75,42 @@ export default ({ location, defaultPages = {} }: Props): QueryOptions => {
             query PbGetPage($url: String!) {
                 pageBuilder {
                     page: getPublishedPage(url: $url) {
-                        data ${getDataFields()}
+                        data {
+                            id
+                            title
+                            url
+                            version
+                            publishedOn
+                            snippet
+                            content
+                            createdBy {
+                                firstName
+                                lastName
+                            }
+                            settings {
+                                _empty
+                                ${getPageSettingsFields()}
+                            }
+                            category {
+                                id
+                                name
+                            }
+                        }
                         error {
                             code
                             message
                         }
                     }
-                    ${defaultPagesFields}
-                    ${settingsFields}
+                    getSettings {
+                        data {
+                            name
+                            social {
+                                image {
+                                    src
+                                }
+                            }
+                        }
+                    }
                 }
             }
         `,
