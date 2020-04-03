@@ -1,4 +1,4 @@
-export default (value: {[key: string]: any}[], i18n: {[key: string]: any}[]) => {
+export default (value: {[key: string]: any}[], context: {[key: string]: any}[]) => {
     // Let's make current locale's value the first element of the array.
     if (value.length < 2) {
         return value;
@@ -7,7 +7,7 @@ export default (value: {[key: string]: any}[], i18n: {[key: string]: any}[]) => 
     // TODO: fix types (create a type for "i18n" parameter)
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
-    const currentLocale = i18n.getLocale();
+    const currentLocale = context.i18n.getLocale();
     const currentLocaleItemIndex = value.findIndex(item => item.locale === currentLocale.id);
 
     const output = [...value];
