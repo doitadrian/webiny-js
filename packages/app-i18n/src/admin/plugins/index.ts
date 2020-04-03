@@ -2,6 +2,7 @@ import i18nSitePlugins from "@webiny/app-i18n/site/plugins";
 import { GlobalSearchPreventHotkeyPlugin } from "@webiny/app-admin/types";
 import routes from "./routes";
 import menus from "./menus";
+import globalSearch from "./globalSearch";
 import richTextEditor from "./richTextEditor";
 import install from "./install";
 import scopesList from "./scopesList";
@@ -20,4 +21,13 @@ const globalSearchHotkey: GlobalSearchPreventHotkeyPlugin = {
     }
 };
 
-export default [routes, menus, scopesList, richTextEditor, i18nSitePlugins, globalSearchHotkey, install];
+export default [
+    routes,
+    menus,
+    globalSearch,
+    scopesList,
+    richTextEditor,
+    i18nSitePlugins,
+    globalSearchHotkey,
+    install
+];
