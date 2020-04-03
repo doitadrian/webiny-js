@@ -24,7 +24,6 @@ export type Modifier = {
  */
 export type Processor = {
     name: string;
-    canExecute?: (data: I18NData) => boolean;
     execute: (data: I18NData) => string | ReactElement;
 };
 

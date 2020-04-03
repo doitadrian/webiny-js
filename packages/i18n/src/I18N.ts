@@ -1,5 +1,8 @@
+// TODO @i18n: remove lodash, use lodash.x
 import _ from "lodash";
-import hash from "short-hash";
+import get from "lodash.get";
+
+// TODO @i18n: these should be imported via default driver, abstract it a bit if possible/needed.
 import * as fecha from "fecha";
 import accounting from "accounting";
 
@@ -22,7 +25,8 @@ export default class I18N {
     defaultFormats: Formats;
     translations: Translations;
     modifiers: { [name: string]: Modifier };
-    processors: { [name: string]: Processor };
+    processors: Processor[];
+    defaultProcessor: string;
 
     constructor() {
         this.locale = null;
@@ -50,10 +54,23 @@ export default class I18N {
          * Default built-in processors are registered immediately below.
          * @type {{}}
          */
-        this.processors = {};
+        this.processors = [];
+
+        /**
+         * Will be used by default, if a processor was not specified.
+         */
+        this.defaultProcessor = "";
     }
 
-    translate(base: string, namespace?: string): any {
+    translate({
+        base,
+        namespace,
+        processor
+    }: {
+        base: string;
+        namespace?: string;
+        processor?: string;
+    }): any {
         // Returns full translation for given base text in given namespace (optional).
         // If translation isn't found, base text will be returned.
         // We create a key out of given namespace and base text.
@@ -62,9 +79,9 @@ export default class I18N {
             throw Error("I18N text namespace not defined.");
         }
 
-        base = _.get(base, "raw.0", base);
+        base = get(base, "raw.0", base);
 
-        let translation = this.getTranslation(namespace + "." + hash(base));
+        let translation = this.getTranslation(namespace, base);
 
         if (!translation) {
             translation = base;
@@ -75,30 +92,52 @@ export default class I18N {
             // @ts-ignore
             return values => {
                 const data = { translation, base, namespace, values, i18n: this };
-                for (const key in this.processors) {
-                    if (this.processors[key].canExecute(data)) {
-                        return this.processors[key].execute(data);
+
+                // TODO @i18n: use first processor (done) if not stated otherwise (not-done).
+                if (!processor) {
+                    return this.processors[0].execute(data);
+                }
+
+                for (let i = 0; i < this.processors.length; i++) {
+                    const currentProcessor = this.processors[i];
+                    if (currentProcessor.name === processor) {
+                        return currentProcessor.execute(data);
                     }
                 }
+
                 return null;
             };
         }
 
         const data: I18NData = { translation, base, namespace, values: {}, i18n: this };
-        for (const key in this.processors) {
-            if (this.processors[key].canExecute(data)) {
-                return this.processors[key].execute(data);
+        // TODO @i18n: use first processor (done) if not stated otherwise (not-done).
+        if (!processor) {
+            return this.processors[0].execute(data);
+        }
+
+        for (let i = 0; i < this.processors.length; i++) {
+            const currentProcessor = this.processors[i];
+            if (currentProcessor.name === processor) {
+                return currentProcessor.execute(data);
             }
         }
+
         return null;
     }
 
     namespace(namespace: string): Translator {
         return base => {
-            return this.translate(base as string, namespace);
+            if (typeof get(base, "raw.0") !== "string") {
+                const options = base;
+                return base => {
+                    return this.translate({ ...options, base, namespace });
+                };
+            }
+            return this.translate({ base, namespace });
         };
     }
 
+    // TODO @i18n: add support for this in the scanner
     ns(namespace: string): Translator {
         return this.namespace(namespace);
     }
@@ -226,11 +265,13 @@ export default class I18N {
 
     /**
      * Returns translation for given text key.
-     * @param key
+     * @param namespace
+     * @param base
      * @returns {*|string}
      */
-    getTranslation(key?: string) {
-        return this.translations[key];
+    getTranslation(namespace: string, base: string) {
+        namespace = get(this.translations, namespace.replace(/\//g, ".")) || {};
+        return namespace[base] || "";
     }
 
     /**
@@ -336,7 +377,7 @@ export default class I18N {
      * @returns {I18N}
      */
     registerProcessor(processor: Processor): I18N {
-        this.processors[processor.name] = processor;
+        this.processors.push(processor);
         return this;
     }
 
@@ -345,9 +386,18 @@ export default class I18N {
      * @param processors
      * @returns {I18N}
      */
-    registerProcessors(processors: Array<Processor>): I18N {
+    registerProcessors(processors: Processor[]): I18N {
         processors.forEach(processor => this.registerProcessor(processor));
         return this;
+    }
+
+    setDefaultProcessor(name) {
+        this.defaultProcessor = name;
+        return this;
+    }
+
+    getDefaultProcessor() {
+        return this.defaultProcessor;
     }
 
     /**
@@ -388,34 +438,34 @@ export default class I18N {
      * Returns current format to be used when outputting dates.
      */
     getDateFormat(): string {
-        return _.get(this.locale, "formats.date", this.defaultFormats.date);
+        return get(this.locale, "formats.date", this.defaultFormats.date);
     }
 
     /**
      * Returns current format to be used when outputting time.
      */
     getTimeFormat(): string {
-        return _.get(this.locale, "formats.time", this.defaultFormats.time);
+        return get(this.locale, "formats.time", this.defaultFormats.time);
     }
 
     /**
      * Returns current format to be used when outputting date/time.
      */
     getDateTimeFormat(): string {
-        return _.get(this.locale, "formats.datetime", this.defaultFormats.datetime);
+        return get(this.locale, "formats.datetime", this.defaultFormats.datetime);
     }
 
     /**
      * Returns current format to be used when outputting prices.
      */
     getPriceFormat(): PriceFormat {
-        return _.assign({}, this.defaultFormats.price, _.get(this.locale, "formats.price", {}));
+        return _.assign({}, this.defaultFormats.price, get(this.locale, "formats.price", {}));
     }
 
     /**
      * Returns current format to be used when outputting numbers.
      */
     getNumberFormat(): NumberFormat {
-        return _.assign({}, this.defaultFormats.number, _.get(this.locale, "formats.number", {}));
+        return _.assign({}, this.defaultFormats.number, get(this.locale, "formats.number", {}));
     }
 }
