@@ -51,6 +51,15 @@ const plugin: GraphQLContextPlugin = {
                 self.__i18n.locale = currentLocale;
                 return self.__i18n.locale;
             },
+            getLocaleById(id) {
+                const allLocales = self.getLocales();
+                for (let i = 0; i < allLocales.length; i++) {
+                    if (allLocales[i].id === id) {
+                        return allLocales[i];
+                    }
+                }
+                return null;
+            },
             getLocales() {
                 return self.__i18n.locales;
             },
