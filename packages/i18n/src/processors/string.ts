@@ -29,23 +29,7 @@ const processTextPart = (part: string, values: Object, modifiers): string => {
 };
 
 const processor: Processor = {
-    name: "default",
-    canExecute(data: { values }) {
-        for (const key in data.values) {
-            const value = data.values[key];
-            if (
-                typeof value === "string" ||
-                typeof value === "number" ||
-                value === null ||
-                value instanceof Date
-            ) {
-                continue;
-            }
-            return false;
-        }
-
-        return true;
-    },
+    name: "string",
     execute(data) {
         const parts = data.translation.split(/({.*?})/);
         return parts.reduce(
