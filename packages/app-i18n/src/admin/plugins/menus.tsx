@@ -16,6 +16,9 @@ const plugin: MenuPlugin = {
                     <Section label={t`Locales`}>
                         <Item label={t`Locales`} path="/i18n/locales" />
                     </Section>
+                    <Section label={t`Texts`}>
+                        <Item label={t`Texts`} path="/i18n/texts" />
+                    </Section>
                 </Menu>
             </SecureView>
         );
