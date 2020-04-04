@@ -34,8 +34,8 @@ jobs:
 
       - name: Deploy API
         working-directory: ./examples
-        run: yarn webiny deploy-api --env dev --debug
+        run:  node ../packages/cli/bin.js deploy-api --env dev --debug
 
       - name: Deploy Apps
         working-directory: ./examples
-        run: yarn webiny deploy-apps --env dev --debug
+        run:  node ../packages/cli/bin.js deploy-apps --env dev --debug
