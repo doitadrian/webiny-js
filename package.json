@@ -101,7 +101,7 @@
     "fsevents": "^2.0.7"
   },
   "scripts": {
-    "build:base": "yarn lerna run build --stream --ignore \"@webiny/app*\" --ignore \"@webiny/api*\" --ignore \"@webiny/serverless*",
+    "build:base": "yarn lerna run build --stream --ignore \"@webiny/app*\" --ignore \"@webiny/api*\" --ignore \"@webiny/serverless*\"",
     "build:components": "yarn lerna run build --scope=@webiny/serverless-* --stream",
     "build:apps": "yarn lerna run build --scope=@webiny/app* --stream",
     "build:api": "yarn lerna run build --scope=@webiny/api* --stream",
