@@ -26,10 +26,10 @@ jobs:
         run: yarn
 
       - name: Build base packages
-        run: lerna run build --stream --ignore "@webiny/app*" --ignore "@webiny/api*" --ignore "@webiny/serverless*"
+        run: yarn build:base"
 
       - name: Build "@webiny/api-*" and "@webiny/app-*" packages
-        run: concurrently yarn build:apps yarn build:api
+        run: yarn concurrently "yarn build:apps" "yarn build:api"
 
       - name: Build components packages (@webiny/serverless*)
         run: yarn build:components
