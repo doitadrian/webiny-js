@@ -26,7 +26,7 @@ jobs:
         run: yarn
 
       - name: Build base packages
-        run: yarn build:base"
+        run: yarn build:base
 
       - name: Build "@webiny/api-*" and "@webiny/app-*" packages
         run: yarn concurrently "yarn build:apps" "yarn build:api"
