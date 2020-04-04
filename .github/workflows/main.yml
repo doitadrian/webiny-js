@@ -25,8 +25,14 @@ jobs:
       - name: Install all dependencies
         run: yarn
 
-      - name: Build all of the packages
-        run: yarn lerna run build
+      - name: Build base packages
+        run: lerna run build --stream --ignore "@webiny/app*" --ignore "@webiny/api*" --ignore "@webiny/serverless*"
+
+      - name: Build "@webiny/api-*" and "@webiny/app-*" packages
+        run: concurrently yarn build:apps yarn build:api
+
+      - name: Build components packages (@webiny/serverless*)
+        run: yarn build:components
 
       - name: Create .env files
         run: echo "works!"
