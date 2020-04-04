@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: All dependencies in order?
+      - name: All dependencies in order
         run: yarn adio
 
       - name: Install all dependencies
