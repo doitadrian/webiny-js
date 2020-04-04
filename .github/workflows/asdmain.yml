@@ -9,24 +9,3 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
-      - name: All dependencies in order
-        run: yarn adio
-
-      - name: Install all dependencies
-        run: yarn
-
-      - name: Build packages
-        run: yarn lerna run build --stream
-
-      - name: Execute Jest tests
-        run: yarn test
-
-      - name: Create .env files
-        run: node .github/workflows/scripts/prepareEnvFiles.js
-
-      - name: Deploy API
-        run: cd examples && yarn webiny deploy-api --env dev --debug
-
-      - name: Deploy Apps
-        run: cd examples && yarn webiny deploy-apps --env dev --debug
