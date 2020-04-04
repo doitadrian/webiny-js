@@ -33,7 +33,9 @@ jobs:
         run: node .github/workflows/scripts/prepareEnvFiles.js
 
       - name: Deploy API
+        working-directory: ./examples
         run: cd examples && yarn webiny deploy-api --env dev --debug
 
       - name: Deploy Apps
+        working-directory: ./examples
         run: cd examples && yarn webiny deploy-apps --env dev --debug
