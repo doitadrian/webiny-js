@@ -101,12 +101,11 @@
     "fsevents": "^2.0.7"
   },
   "scripts": {
-    "build": "yarn build:base && yarn build:components && yarn build:apps:api && yarn build:components",
-    "build:base": "yarn lerna run build --stream --ignore \"@webiny/app*\" --ignore \"@webiny/api*\" --ignore \"@webiny/commodo*\" --ignore \"@webiny/serverless*\"",
-    "build:components": "yarn lerna run build --scope=@webiny/serverless-* --stream",
+    "build": "yarn build:base && yarn concurently \"yarn build:serverless\" \"yarn build:apps\" \"yarn build:api\"",
+    "build:base": "yarn lerna run build --ignore \"@webiny/app*\" --ignore \"@webiny/api*\" --ignore \"@webiny/serverless*\" --stream",
+    "build:serverless": "yarn lerna run build --scope=@webiny/serverless* --stream",
     "build:apps": "yarn lerna run build --scope=@webiny/app* --stream",
-    "build:api": "yarn lerna run build --scope=@webiny/commodo* --scope=@webiny/api* --stream",
-    "build:apps:api": "yarn concurrently \"yarn build:apps\" \"yarn build:api\"",
+    "build:api": "yarn lerna run build --scope=@webiny/api* --stream",
     "build:packages": "yarn lerna run build --scope=@webiny/* --ignore=@webiny/serv* --stream",
     "watch:apps": "lerna run watch --scope=@webiny/app* --stream --parallel",
     "watch:api": "lerna run watch --scope=@webiny/api* --stream --parallel",
