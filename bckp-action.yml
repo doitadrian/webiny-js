@@ -1,0 +1,37 @@
+name: Check Pull Requests
+
+on:
+  pull_request:
+    branches: [ master ]
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  MONGODB_SERVER: ${{ secrets.MONGODB_SERVER }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: All dependencies in order?
+        run: yarn adio
+
+      - name: Install all dependencies
+        run: yarn
+
+      - name: Build packages
+        run: yarn lerna run build --stream
+
+      - name: Execute Jest tests
+        run: yarn test
+
+      - name: Create .env files
+        run: node .github/workflows/scripts/prepareEnvFiles.js
+
+      - name: Deploy API
+        run: cd examples && yarn webiny deploy-api --env dev --debug
+
+      - name: Deploy Apps
+        run: cd examples && yarn webiny deploy-apps --env dev --debug

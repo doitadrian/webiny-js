@@ -15,27 +15,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Install all dependencies
-        run: yarn
-
-      - name: All dependencies in order?
-        run: yarn adio
-
-      - name: Build packages
-        run: yarn lerna run build --stream
-
-      - name: Execute Jest tests
-        run: yarn test
-
-      - name: Create .env files
-        run: node .github/workflows/scripts/prepareEnvFiles.js
-
-      - name: Deploy API
-        working-directory: ./examples
-        run:  node ../packages/cli/bin.js deploy-api --env dev --debug
-
-      - name: Deploy Apps
-        working-directory: ./examples
-        run:  node ../packages/cli/bin.js deploy-apps --env dev --debug
+      - name: Hello world action step
+        id: hello
+        uses: doitadrian/action-pr
+        with:
+          who-to-greet: 'Mujo and Haso'
+      # Use the output from the `hello` step
+      - name: Get the output time
+        run: echo "The time was ${{ steps.hello.outputs.time }}"
