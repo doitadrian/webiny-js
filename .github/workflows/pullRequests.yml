@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Hello world action step
         id: hello
-        uses: doitadrian/action-pr
+        uses: doitadrian/action-pr@v1
         with:
           who-to-greet: 'Mujo and Haso'
       # Use the output from the `hello` step
