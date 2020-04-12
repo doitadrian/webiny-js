@@ -15,11 +15,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: All dependencies in order?
-        run: yarn adio
-
       - name: Install all dependencies
         run: yarn
+
+      - name: All dependencies in order?
+        run: yarn adio
 
       - name: Build packages
         run: yarn lerna run build --stream
