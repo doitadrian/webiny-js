@@ -23,7 +23,7 @@ jobs:
         run: yarn
 
       - name: Save artifact
-        uses: doitadrian/upload-artifact@v1
+        uses: actions/upload-artifact@v1
         with:
           name: homework
           path: .
