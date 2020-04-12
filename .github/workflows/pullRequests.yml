@@ -1,6 +1,8 @@
 name: Check Pull Requests
 
 on:
+  push:
+    branches: [ master ]
   pull_request:
     branches: [ master ]
 
@@ -25,3 +27,16 @@ jobs:
         with:
           name: homework
           path: .
+
+  build:
+    needs: setup-webiny-js
+    name: Build everything
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download checked out files
+        uses: actions/download-artifact@v1
+        with:
+          name: homework
+
+      - name: Install all dependencies
+        run: yarn lerna run build --stream
