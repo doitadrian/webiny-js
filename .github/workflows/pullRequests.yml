@@ -12,31 +12,11 @@ env:
   MONGODB_SERVER: ${{ secrets.MONGODB_SERVER }}
 
 jobs:
-  setup-webiny-js:
-    name: Clone "webiny-js" repo and set it up
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install all dependencies
-        run: yarn
-
-      - name: Save artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: homework
-          path: .
-
-  build:
-    needs: setup-webiny-js
-    name: Build everything
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download checked out files
-        uses: actions/download-artifact@v1
-        with:
-          name: homework
-
-      - name: Install all dependencies
-        run: yarn lerna run build --stream
+      - name: DoIt
+        uses: doitadrian/action-pr@master
