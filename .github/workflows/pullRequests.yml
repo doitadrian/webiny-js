@@ -20,12 +20,6 @@ jobs:
       - name: Install all dependencies
         run: yarn
 
-      - uses: doitadrian/action-pr@master
-
-      # --------------------------------------------------------
-      - name: Run E2E tests
-        run: echo "Running Cypress tests" && sleep 5
-
       - name: All dependencies in order?
         run: yarn adio
 
@@ -35,5 +29,8 @@ jobs:
       - name: Execute Jest tests
         run: yarn test
 
+      - uses: doitadrian/action-pr@master
 
-
+      # --------------------------------------------------------
+      - name: Run E2E tests
+        run: echo "Running Cypress tests" && sleep 5
