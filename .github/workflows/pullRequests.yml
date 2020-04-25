@@ -15,8 +15,25 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      - name: Build and run tests
-        uses: doitadrian/action-pr@master
+      - name: Install all dependencies
+        run: yarn
+
+      - uses: doitadrian/action-pr@master
+
+      # --------------------------------------------------------
+      - name: Run E2E tests
+        run: echo "Running Cypress tests" && sleep 5
+
+      - name: All dependencies in order?
+        run: yarn adio
+
+      - name: Build packages
+        run: yarn lerna run build --stream
+
+      - name: Execute Jest tests
+        run: yarn test
+
+
+
